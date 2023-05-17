@@ -1,0 +1,7 @@
+# Vehicle Command Governor
+bool enable # goal
+---
+string status # result
+---
+float64[] error # feedback
+

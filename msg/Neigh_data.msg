@@ -1,0 +1,2 @@
+Info_msg[] info
+

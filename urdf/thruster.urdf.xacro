@@ -1,0 +1,130 @@
+<?xml version="1.0" ?>
+<!-- 
+  Copyright (C) 2021  Vincenzo D'Angelo
+  This program is developed for Applicon srl by Vincenzo D'Angelo. 
+  Its copy, use, redistribution or modification is prohibited, or requires
+  you to ask for permission. All authorized modifications made to 
+  the software are subject to the same conditions as the original software.
+  This program is provided as is: WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  For a copy of the complete license please contact develop@applicon.it.
+ -->
+
+<!-- Xacro macros for thrusters.
+    Define xacro macros for thruster models:
+ -->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Thrusters' propeller 3D model -->
+    <xacro:property name="prop_mesh_file" value="package://asv/meshes/propeller.stl"/>
+
+    <!-- Thruster macro with integration of joint and link-->
+    <xacro:macro name="thruster_macro" params="thruster_id *origin">
+        
+        <link name="t${thruster_id}_frame">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="${prop_mesh_file}" scale="1 1 1"/>
+                </geometry>
+                <material name="white_rviz">
+                    <color rgba="1 1 1 1"/>
+                </material>
+            </visual>
+            <inertial>
+                <origin xyz="0 0 0" />
+                <mass value="0.65779" />
+                <inertia ixx="3.1422e-05" ixy="0" ixz="0"
+                         iyy="3.1412e-05" iyz="0"
+                         izz="5.2627e-05" />
+            </inertial>
+            <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+        </collision>
+        </link>
+
+        <joint name="t${thruster_id}_joint" type="continuous">
+            <xacro:insert_block name="origin"/>
+            <parent link="hull_link"/>
+            <child link="t${thruster_id}_frame" />
+            <axis xyz="0 0 1"/> 
+        </joint>
+
+        
+        <gazebo>
+            <plugin name="t${thruster_id}_thruster_model" filename="libuuv_thruster_ros_plugin.so">
+            <!-- Name of the thruster link -->
+            <linkName>t${thruster_id}_frame</linkName>
+
+            <!-- Name of the joint between thruster and vehicle base link -->
+            <jointName>t${thruster_id}_joint</jointName>
+            
+            <!-- Make the thruster aware of its id -->
+            <thrusterID>${thruster_id}</thrusterID>
+
+            <!-- Gain of the input command signal -->
+            <gain>1</gain>
+
+            <!-- Minimum and maximum thrust force output allowed -->
+            <!-- 9.2 Kgf -> 90 N -->
+            <thrustMin>-90</thrustMin>
+            <thrustMax>90</thrustMax>
+            
+            <!--
+            Input limit value for the input signal for thruster unit
+            7200 RPM -> 750 rad/s maybe pwm [0;100] is better
+            -->
+            <clampMin>-750</clampMin>
+            <clampMax>750</clampMax>
+
+            <!--
+            Value from 0 to 1 to set the efficiency of the output thrust force
+            Default value is 1.0
+            -->
+            <thrust_efficiency>1</thrust_efficiency>
+
+            <!--
+            Value from 0 to 1 to set the efficiency of the propeller as a factor
+            to be multiplied to the current value of the state variable at each
+            iteration.
+            Default value is 1.0
+            -->
+            <propeller_efficiency>1</propeller_efficiency>
+
+            <dynamics>
+                <type>ZeroOrder</type>
+            </dynamics>
+
+            <conversion>
+                <type>Basic</type>
+                <rotorConstant>0.00016</rotorConstant>
+            </conversion>
+
+            </plugin>
+        </gazebo>
+
+
+    <gazebo reference="t${thruster_id}_frame">
+        <provideFeedback>true</provideFeedback>
+    </gazebo>
+
+    <gazebo>
+        <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+        <updateRate>1000.0</updateRate>
+        <topicName>ft_sensor_topic</topicName> 
+        <jointName>t${thruster_id}_joint</jointName>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.003</stddev>  
+        </noise>
+        </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>
