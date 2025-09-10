@@ -1,0 +1,87 @@
+<!-- Launch ASV core modules.
+        + thrusters_manager 
+            - low_level (thrusters_manager + rosserial)
+            - virtual (thrusters_manager)
+        + vehicle_controller
+        + robot_state_publisher
+ -->
+
+<launch>
+    <!-- Vehicle's parameters -->
+    <arg name="model" default="$(find asv)/urdf/asv.urdf.xacro"/>
+    <arg name = "namespace" default = "asv3" />
+    <arg name = "PORT" default = "/dev/ttyACM1" />
+    <arg name = "BAUD" default = "57600" />
+    <arg name = "sim" default = "0" />
+    
+    <group ns="$(arg namespace)">
+        <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+        <rosparam command="load" file="$(find asv)/param/param.yaml" />
+
+        <!-- Set the prefix for TF plugin -->
+        <arg name="tf_prefix" value="$(arg namespace)_tf" />
+        
+        <!-- Robot State Publisher -->
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="50.0" />
+            <param name="tf_prefix" value="$(arg tf_prefix)"/>
+        </node>
+
+        <!-- Joint State Publisher (Thrusters) -->
+        <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
+            <param name="publish_frequency" type="double" value="50.0" />
+            <param name="tf_prefix" value="$(arg tf_prefix)"/>
+        </node>
+
+        <!-- Static transformation from odom to base -->
+        <node pkg="tf" type="static_transform_publisher" name="odom_to_base" args="0 0 0 0 0 0 1 $(arg namespace)_tf/odom $(arg namespace)_tf/base_link 100" />
+
+        <group if="$(eval arg('sim') == 1)">
+            <!-- Thruster Manager for Simulation Mode-->
+            <node pkg="asv" name="thrusters_manager_node" type="thrusters_manager.py" output="screen">
+                <param name="topic_prefix" value="/$(arg namespace)"/>
+            </node>
+        </group>
+
+        <group if="$(eval arg('sim') == 0)">
+            <!-- Thruster Manager Bridge for STM32 -->
+            <node pkg="asv" name="thrusters_manager_node" type="thrusters_manager2.py" output="screen">
+                <param name="topic_prefix" value="/$(arg namespace)"/>
+            </node>
+        </group>
+
+        <node pkg="asv" name="gps_imu_odometry" type="gps_imu_odometry.py" output="screen">
+                <param name="topic_prefix" value="/$(arg namespace)"/>
+        </node>
+
+
+        <node pkg="asv" name="vehicle_controller" type="vehicle_controller.py" output="screen">
+                <param name="topic_prefix" value="/$(arg namespace)"/>
+        </node>
+
+
+        <group if="$(eval arg('sim') == 0)"> 
+
+            <!-- IMU Sensor Node -->
+            <node pkg="asv" name="imu_node" type="vectornav_imu.py">
+                <param name="topic_prefix" value="/$(arg namespace)"/>
+            </node>
+
+            <!-- GPS Sensor Node  -->
+            <node pkg="asv" name="gps_node" type="ublox_gps.py">
+                <param name="topic_prefix" value="/$(arg namespace)"/>
+            </node> 
+
+        </group>
+
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="controlled_vehicle" type="controlled_vehicle.py" output="screen"> 
+            <param name="topic_prefix" value="/$(arg namespace)"/>
+        </node> 
+ 
+    </group>
+
+
+
+</launch>

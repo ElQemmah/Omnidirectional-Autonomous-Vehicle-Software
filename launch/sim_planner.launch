@@ -1,0 +1,102 @@
+<!-- Launch Gazebo and spawn the robot model. 
+ -->
+
+<launch>
+    <!-- Gazebo arguments -->
+    <arg name="model" default="$(find asv)/urdf/asv.urdf.xacro"/>
+    <arg name="debug" default="false"/>    
+    <arg name="gui" default="true"/>
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="physics" default="ode"/>
+    <arg name="recording" default="false"/>
+    <arg name="verbose" default="true"/>
+
+    <!-- Vehicles' parameters -->
+    <arg name = "ns_1" value = "asv1" />
+    
+    <arg name="asv1_x"   default="0.0"/>
+    <arg name="asv1_y"   default="0.0"/>
+    <arg name="asv1_z"   default="1.2"/>
+    <arg name="asv1_yaw" default="-1.56"/>
+
+
+    <!-- Launch Gazebo -->
+    <include file="$(find asv)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find asv_wave_sim_gazebo)/worlds/ocean.world"/>
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+        <arg name="physics" value="$(arg physics)"/>
+        <arg name="recording" value="$(arg recording)"/>
+        <arg name="verbose" value="$(arg verbose)"/>
+    </include>
+
+    <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+    <!-- Vehicle 1 -->
+    <group ns="$(arg ns_1)">
+        <!-- Load parameters -->
+        <rosparam command="load" file="$(find asv)/param/param.yaml" />
+    
+        <!-- Set the prefix for TF plugin -->
+        <arg name="tf_prefix" value="$(arg ns_1)_tf" />
+        
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="50.0" />
+            <param name="tf_prefix" value="$(arg tf_prefix)"/>
+        </node>
+
+        <!-- Spawn the model -->
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -model $(arg ns_1) -x $(arg asv1_x) -y $(arg asv1_y) -z $(arg asv1_z) -Y $(arg asv1_yaw) -param /robot_description"/>
+
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="thrusters_manager_node" type="thrusters_manager.py">
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+        </node>
+
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="gps_imu_odometry" type="gps_imu_odometry.py" output="screen">
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+        </node>
+
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="vehicle_controller" type="vehicle_controller.py">
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+            <param name="xinitial" value="$(arg asv1_x)"/>
+            <param name="yinitial" value="$(arg asv1_y)"/>
+            <param name="yaw_initial" value="$(arg asv1_yaw)"/>
+        </node>
+
+                <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="vehicle_cg" type="reference_governor.py" output="screen"> 
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+            <param name="xinitial" value="$(arg asv1_x)"/>
+            <param name="yinitial" value="$(arg asv1_y)"/>
+            <param name="yaw_initial" value="$(arg asv1_yaw)"/>
+        </node> 
+
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="communication" type="communication_manager.py" output="screen"> 
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+            <param name="xinitial" value="$(arg asv1_x)"/>
+            <param name="yinitial" value="$(arg asv1_y)"/>
+            <param name="yaw_initial" value="$(arg asv1_yaw)"/>
+        </node> 
+
+        <!--
+        <node pkg="asv" name="planner" type="planner.py" output="screen">
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+        </node> -->
+
+   </group>
+
+
+
+</launch>
+

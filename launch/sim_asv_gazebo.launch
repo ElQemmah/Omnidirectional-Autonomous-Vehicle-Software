@@ -1,0 +1,86 @@
+<!-- Launch Gazebo and spawn the robot model. 
+ -->
+
+<launch>
+    <!-- Arguments -->
+    <arg name="model" default="$(find asv)/urdf/asv.urdf.xacro"/>
+    <arg name = "namespace" default = "asv1" />
+    <arg name = "PORT" default = "/dev/ttyACM1" />
+    <arg name = "BAUD" default = "57600" />
+    <arg name = "sim" default = "0" />
+    
+
+    <!-- Vehicles' parameters -->
+    <arg name = "ns_1" value = "asv1" />
+    
+    <arg name="asv1_x"   default="0.0"/>
+    <arg name="asv1_y"   default="0.0"/>
+    <arg name="asv1_yaw" default="3.19"/>
+
+
+
+    <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+
+    <!-- Vehicle 1 -->
+    <group ns="$(arg ns_1)">
+        <!-- Load parameters -->
+        <rosparam command="load" file="$(find asv)/param/param.yaml" />
+    
+        <!-- Set the prefix for TF plugin -->
+        <arg name="tf_prefix" value="$(arg ns_1)_tf" />
+        
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+            <param name="publish_frequency" type="double" value="50.0" />
+            <param name="tf_prefix" value="$(arg tf_prefix)"/>
+        </node>
+
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="thrusters_manager_node" type="thrusters_manager2.py">
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+        </node>
+
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="gps_imu_odometry" type="gps_imu_odometry.py" output="screen">
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+        </node>
+
+
+        <!-- IMU Sensor Node -->
+        <node pkg="asv" name="imu_node" type="vectornav_imu.py">
+            <param name="topic_prefix" value="/$(arg namespace)"/>
+        </node>
+
+        <!-- GPS Sensor Node -->
+        <node pkg="asv" name="gps_node" type="ublox_gps.py">
+            <param name="topic_prefix" value="/$(arg namespace)"/>
+        </node> 
+
+
+        <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="vehicle_controller" type="vehicle_controller2.py" output="screen">
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+        </node>
+
+       <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="controlled_vehicle" type="controlled_vehicle.py" output="screen"> 
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+        </node> 
+
+                <!-- Call node with correct prefix for sub/pub coeherently -->
+        <node pkg="asv" name="vehicle_cg" type="reference_governor.py" output="screen"> 
+            <param name="topic_prefix" value="/$(arg ns_1)"/>
+            <param name="xinitial" value="$(arg asv1_x)"/>
+            <param name="yinitial" value="$(arg asv1_y)"/>
+            <param name="yaw_initial" value="$(arg asv1_yaw)"/>
+        </node> 
+
+
+   </group>
+
+
+    
+
+</launch>
+
