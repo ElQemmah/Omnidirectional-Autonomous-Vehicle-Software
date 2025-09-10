@@ -13,7 +13,7 @@ This repository contains the runtime code for onboard operation (Guidance–Navi
 - **Control**: LTI controller (as presented in the paper, Sec. 3.5) and Σ⁺ thrust allocation for the four-thruster holonomic layout.  
 - **Vision**: stereocamera subscriber (e.g., ZED 2i) to compute minimum obstacle distance in the field of view.  
 - **Hardware**: thruster driver node for serial communication with ESCs.  
-- **Bringup**: launch files and parameter configs under `ros/chelon_bringup`.  
+- **Bringup**: launch files and parameter configs under `asv/launch`.  
 - **Reproducibility**: parameters identified in the paper (linear model and controller gains) provided in `config/`.  
 - **Documentation**: additional notes in `docs/`.  
 
