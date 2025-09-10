@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<!-- 
+  Copyright (C) 2021 Vincenzo D'Angelo
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<!--  Xacro macros for vehicle sensors.
+    Define xacro macros for GPS and IMU sensrs:
+ -->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    
+    <!-- GPS macro with integration of joint and link-->
+    <xacro:macro name="gps_macro" params="*origin">
+       
+        <link name="gps_frame">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.1 0.07 0.02"/>
+                </geometry>
+                <material name="white_rviz">
+                    <color rgba="1 1 1 1"/>
+                </material>
+            </visual>
+            <inertial>
+                <origin xyz="0 0 0" />
+                <mass value="0.65779" />
+                <inertia ixx="3.1422e-05" ixy="0" ixz="0"
+                         iyy="3.1412e-05" iyz="0"
+                         izz="5.2627e-05" />
+            </inertial>
+        </link>
+
+        <joint name="gps_joint" type="fixed">
+            <xacro:insert_block name="origin"/>
+            <parent link="hull_link"/>
+            <child link="gps_frame" />
+            <axis xyz="0 0 0"/> 
+        </joint>
+
+        
+        <gazebo>
+            <plugin name="gps_model" filename="libhector_gazebo_ros_gps.so">
+                <!-- Name of the GPS link -->
+                <bodyName>gps_frame</bodyName>
+                <topicName>fix</topicName>
+                <velocityTopicName>fix_velocity</velocityTopicName>
+                <referenceLatitude>39.055306</referenceLatitude>
+                <referenceLongitude>16.091825</referenceLongitude>
+                <referenceAltitude>0.1</referenceAltitude>
+                <drift>0 0 0</drift>
+                <gaussianNoise>0 0 0</gaussianNoise>
+                <velocityDrift>0 0 0</velocityDrift>
+                <velocityGaussianNoise>0 0 0</velocityGaussianNoise>
+                <alwaysOn>1</alwaysOn>
+                <updateRate>50.0</updateRate>
+            </plugin>
+        </gazebo>
+
+  </xacro:macro>
+
+
+  <!-- IMU macro with integration of joint and link-->
+    <xacro:macro name="imu_macro" params="*origin">
+        
+        <link name="imu_frame">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.05 0.05 0.03"/>
+                </geometry>
+                <material name="white_rviz">
+                    <color rgba="1 1 1 1"/>
+                </material>
+            </visual>
+            <inertial>
+                <origin xyz="0 0 0" />
+                <mass value="0.65779" />
+                <inertia ixx="3.1422e-05" ixy="0" ixz="0"
+                         iyy="3.1412e-05" iyz="0"
+                         izz="5.2627e-05" />
+            </inertial>
+        </link>
+
+        <joint name="imu_joint" type="fixed">
+            <xacro:insert_block name="origin"/>
+            <parent link="hull_link"/>
+            <child link="imu_frame" />
+            <axis xyz="0 0 0"/> 
+        </joint>
+
+        
+        <gazebo reference="imu_frame">
+            <gravity>true</gravity>
+            <sensor name="imu_sensor" type="imu">
+            <always_on>true</always_on>
+            <update_rate>100</update_rate>
+            <visualize>true</visualize>
+            <topic>__default_topic__</topic>
+            <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+                <topicName>imu</topicName>
+                <bodyName>imu_frame</bodyName>
+                <updateRateHZ>10.0</updateRateHZ>
+                <gaussianNoise>0.0</gaussianNoise>
+                <xyzOffset>0 0 0</xyzOffset>
+                <rpyOffset>0 0 0</rpyOffset>
+                <frameName>imu_frame</frameName>
+                <initialOrientationAsReference>false</initialOrientationAsReference>
+            </plugin>
+            <pose>0 0 0 0 0 0</pose>
+            </sensor>
+        </gazebo>
+        
+  </xacro:macro>
+
+</robot>
