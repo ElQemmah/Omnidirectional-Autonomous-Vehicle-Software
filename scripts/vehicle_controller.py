@@ -42,9 +42,9 @@ class VehicleController:
         #self.__seq = 0
         #self.ref = np.array(rospy.get_param('control/reference', np.zeros((3,1))))
         self.Fb = np.array(rospy.get_param('control/feedback_gain', (np.zeros((3*6,1))).tolist()))
-        self.Fb = 0.4*np.array(self.Fb).reshape(3,6)
+        self.Fb = 0.3*np.array(self.Fb).reshape(3,6)
         self.Ff = np.array(rospy.get_param('control/feedforward_gain', (np.zeros((3*3,1))).tolist()))
-        self.Ff = 0.4*np.array(self.Ff).reshape(3,3)
+        self.Ff = 0.3*np.array(self.Ff).reshape(3,3)
         self.Cy = np.array(rospy.get_param('control/output_matrix', (np.zeros((3*6,1))).tolist()))
         self.Cy = np.array(self.Cy).reshape(3,6)
 
