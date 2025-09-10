@@ -1,0 +1,58 @@
+#  GNU License (C) 2025 LaSa, DIMES, Univerity of Calabria
+
+# This program is developed for LaSa, DIMES, Univerity of Calabria. 
+# Its copy, use, redistribution or modification is prohibited, or requires
+# you to ask for permission. All authorized modifications made to 
+# the software are subject to the same conditions as the original software.
+# This program is provided as is: WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# For a copy of the complete license please contact elqemmah.ay@dimes.unical.it.
+
+# Minimal notes added; program logic unchanged.
+
+[del]
+[set]
+RAM CFG-UART1INPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-UART1INPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-UART1OUTPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-UART1OUTPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-UART1OUTPROT-RTCM3X 0                    # write value 1                    to item id 0x10740004 in layer 0
+Flash CFG-UART1OUTPROT-RTCM3X 0                    # write value 1                    to item id 0x10740004 in layer 2
+RAM CFG-UART1INPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 0
+Flash CFG-UART1INPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 2
+RAM CFG-UART1OUTPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-UART1OUTPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 2
+RAM CFG-UART1INPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-UART1INPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 2
+
+RAM CFG-USBINPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-USBINPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-USBOUTPROT-NMEA 1                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-USBOUTPROT-NMEA 1                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-USBOUTPROT-RTCM3X 0                    # write value 1                    to item id 0x10740004 in layer 0
+Flash CFG-USBOUTPROT-RTCM3X 0                    # write value 1                    to item id 0x10740004 in layer 2
+RAM CFG-USBINPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 0
+Flash CFG-USBINPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 2
+RAM CFG-USBOUTPROT-UBX 1                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-USBOUTPROT-UBX 1                    # write value 0                    to item id 0x10740001 in layer 2
+RAM CFG-USBINPROT-UBX 1                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-USBINPROT-UBX 1                    # write value 0                    to item id 0x10740001 in layer 2
+
+RAM CFG-I2CINPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-I2CINPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-I2COUTPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-I2COUTPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-I2COUTPROT-RTCM3X 0                    # write value 1                    to item id 0x10740004 in layer 0
+Flash CFG-I2COUTPROT-RTCM3X 0                    # write value 1                    to item id 0x10740004 in layer 2
+RAM CFG-I2CINPROT-RTCM3X 1                    # write value 0                    to item id 0x10730004 in layer 0
+Flash CFG-I2CINPROT-RTCM3X 1                    # write value 0                    to item id 0x10730004 in layer 2
+RAM CFG-I2COUTPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-I2COUTPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 2
+RAM CFG-I2CINPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-I2CINPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 2
+
+# Trobleshooting for RTK operation. This messages contains the rtk messages recieved
+RAM CFG-MSGOUT-UBX_RXM_RTCM_USB 0x1                  # Get the type and numeber of RTK messages received
+Flash CFG-MSGOUT-UBX_RXM_RTCM_USB 0x1                
+RAM CFG-MSGOUT-UBX_NAV_RELPOSNED_USB 0x1                  # For moving base operation get relative position and heading
+Flash CFG-MSGOUT-UBX_NAV_RELPOSNED_USB 0x1

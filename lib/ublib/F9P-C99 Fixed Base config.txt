@@ -1,0 +1,73 @@
+#  GNU License (C) 2025 LaSa, DIMES, Univerity of Calabria
+
+# This program is developed for LaSa, DIMES, Univerity of Calabria. 
+# Its copy, use, redistribution or modification is prohibited, or requires
+# you to ask for permission. All authorized modifications made to 
+# the software are subject to the same conditions as the original software.
+# This program is provided as is: WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# For a copy of the complete license please contact elqemmah.ay@dimes.unical.it.
+
+# Minimal notes added; program logic unchanged.
+
+[del]
+[set]
+# Disable UART both as in and as out port
+RAM CFG-UART1INPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-UART1INPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-UART1OUTPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-UART1OUTPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-UART1OUTPROT-RTCM3X 0                    # write value 1                    to item id 0x10740004 in layer 0
+Flash CFG-UART1OUTPROT-RTCM3X 0                    # write value 1                    to item id 0x10740004 in layer 2
+RAM CFG-UART1INPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 0
+Flash CFG-UART1INPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 2
+RAM CFG-UART1OUTPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-UART1OUTPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 2
+RAM CFG-UART1INPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-UART1INPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 2
+
+# Use USB as configuration port and user feedback control port
+RAM CFG-USBINPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-USBINPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-USBOUTPROT-NMEA 1                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-USBOUTPROT-NMEA 1                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-USBOUTPROT-RTCM3X 1                    # write value 1                    to item id 0x10740004 in layer 0
+Flash CFG-USBOUTPROT-RTCM3X 1                    # write value 1                    to item id 0x10740004 in layer 2
+RAM CFG-USBINPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 0
+Flash CFG-USBINPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 2
+RAM CFG-USBOUTPROT-UBX 1                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-USBOUTPROT-UBX 1                    # write value 0                    to item id 0x10740001 in layer 2
+RAM CFG-USBINPROT-UBX 1                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-USBINPROT-UBX 1                    # write value 0                    to item id 0x10740001 in layer 2
+
+# I2C interface is used for sending messages to rover
+RAM CFG-I2CINPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-I2CINPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-I2COUTPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 0
+Flash CFG-I2COUTPROT-NMEA 0                    # write value 0                    to item id 0x10730002 in layer 2
+RAM CFG-I2COUTPROT-RTCM3X 1                    # write value 1                    to item id 0x10740004 in layer 0
+Flash CFG-I2COUTPROT-RTCM3X 1                    # write value 1                    to item id 0x10740004 in layer 2
+RAM CFG-I2CINPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 0
+Flash CFG-I2CINPROT-RTCM3X 0                    # write value 0                    to item id 0x10730004 in layer 2
+RAM CFG-I2COUTPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-I2COUTPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 2
+RAM CFG-I2CINPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 0
+Flash CFG-I2CINPROT-UBX 0                    # write value 0                    to item id 0x10740001 in layer 2
+RAM CFG-MSGOUT-RTCM_3X_TYPE1005_I2C 0x1      # Output rate of the RTCM-3X-TYPE1005 message on port I2C: Stationary RTK reference station ARP
+Flash CFG-MSGOUT-RTCM_3X_TYPE1005_I2C 0x1
+RAM CFG-MSGOUT-RTCM_3X_TYPE1074_I2C 0x1      # Output rate of the RTCM-3X-TYPE1074 message on port I2C: RTCM GPS MSM4 message
+Flash CFG-MSGOUT-RTCM_3X_TYPE1074_I2C 0x1
+RAM CFG-MSGOUT-RTCM_3X_TYPE1084_I2C 0x1      # Output rate of the RTCM-3X-TYPE1084 message on port I2C: RTCM GLONASS MSM4 message
+Flash CFG-MSGOUT-RTCM_3X_TYPE1084_I2C 0x1
+RAM CFG-MSGOUT-RTCM_3X_TYPE1094_I2C 0x1      # Output rate of the RTCM-3X-TYPE1094 message on port I2C: RTCM Galileo MSM4 message
+Flash CFG-MSGOUT-RTCM_3X_TYPE1094_I2C 0x1
+RAM CFG-MSGOUT-RTCM_3X_TYPE1124_I2C 0x1      # Output rate of the RTCM-3X-TYPE1124 message on port I2C: RTCM BeiDou MSM4 message
+Flash CFG-MSGOUT-RTCM_3X_TYPE1124_I2C 0x1
+RAM CFG-MSGOUT-RTCM_3X_TYPE1230_I2C 0x1      # Output rate of the RTCM-3X-TYPE1230 message on port I2C: RTCM GLONASS bias message
+Flash CFG-MSGOUT-RTCM_3X_TYPE1230_I2C 0x1
+
+# Trubleshooting messages
+RAM CFG-MSGOUT-UBX_NAV_SVIN_USB 0x1           # Check survey-in for self-position discovery
+Flash CFG-MSGOUT-UBX_NAV_SVIN_USB 0x1
+RAM CFG-MSGOUT-UBX_NAV_PVT_USB 0x1            # Check if fixed mode is active Remember to set location if not in survey-in
+Flash CFG-MSGOUT-UBX_NAV_PVT_USB 0x1                  
