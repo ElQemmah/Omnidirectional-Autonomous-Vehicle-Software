@@ -25,7 +25,7 @@ This repository contains the runtime code for onboard operation (Guidance–Navi
 - Python 3.  
 - `rospy`, `sensor_msgs`, `geometry_msgs`, `std_msgs`.  
 - ZED 2i ROS wrapper (if using the stereocamera).
-- Battery Management System software is not included. Please visit repository: ([https://github.com/YOUR-ORG/chelon_asv_sim](https://github.com/RobotnikAutomation/daly_bms)).
+- Battery Management System software is not included. Please visit repository: [https://github.com/RobotnikAutomation/daly_bms](https://github.com/RobotnikAutomation/daly_bms)).
 
 ### Running the stack
 ```bash
