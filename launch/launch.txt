@@ -1,0 +1,1 @@
+Folder containing the files to be launched that then run all required ROS nodes
