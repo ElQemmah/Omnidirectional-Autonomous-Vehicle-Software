@@ -1,0 +1,1 @@
+Folder containing the image of the block diagram of the GNC Architecture 
